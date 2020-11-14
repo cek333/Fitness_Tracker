@@ -36,10 +36,17 @@
   return arr;
   }
 function populateChart(data) {
-  let durations = duration(data);
-  let pounds = calculateTotalWeight(data);
+  let durations = duration(data); // duration by exercise i.e. each array entry is duration of exercise
+  let pounds = calculateTotalWeight(data); // pounds by exercise
   let workouts = workoutNames(data);
   const colors = generatePalette();
+  // Calculate duration/pounds by workout (instead of by exercise).
+  //   Each workout can have multiple exercises. So for each workout
+  //   we want the total duration and pounds per workout.
+  //   `pounds` and `durations` above will be used for pie charts.
+  //   `workoutDurations` and `workoutPounds` will be used for line/bar charts.
+  let workoutDurations = calcDurationByWorkout(data);
+  let workoutPounds = calcWeightByWorkout(data);
 
   let line = document.querySelector("#canvas").getContext("2d");
   let bar = document.querySelector("#canvas2").getContext("2d");
@@ -63,7 +70,7 @@ function populateChart(data) {
           label: "Workout Duration In Minutes",
           backgroundColor: "red",
           borderColor: "red",
-          data: durations,
+          data: workoutDurations,
           fill: false
         }
       ]
@@ -109,7 +116,7 @@ function populateChart(data) {
       datasets: [
         {
           label: "Pounds",
-          data: pounds,
+          data: workoutPounds,
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
             "rgba(54, 162, 235, 0.2)",
@@ -200,6 +207,17 @@ function duration(data) {
   return durations;
 }
 
+function calcDurationByWorkout(data) {
+  let durations = [];
+
+  data.forEach(workout => {
+    let workoutDuration = workout.exercises.reduce((acc, curr) => acc + curr.duration, 0);
+    durations.push(workoutDuration);
+  });
+
+  return durations;
+}
+
 function calculateTotalWeight(data) {
   let total = [];
 
@@ -210,6 +228,18 @@ function calculateTotalWeight(data) {
   });
 
   return total;
+}
+
+function calcWeightByWorkout(data) {
+  let weights = [];
+
+  data.forEach(workout => {
+    let workoutWeight = workout.exercises.reduce((acc, curr) =>
+                                            curr.weight ? acc + curr.weight : acc, 0);
+    weights.push(workoutWeight);
+  });
+
+  return weights;
 }
 
 function workoutNames(data) {
