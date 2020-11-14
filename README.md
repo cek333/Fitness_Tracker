@@ -28,4 +28,4 @@ Clicking `Fitness Tracker` loads the homepage. Selecting `Dashboard` loads a new
 * The bottom-right doughnut chart shows the pounds lifted for each exercise in your last 7 workouts.
 
 ## Try It
-You can give the app a try [here]().
+You can give the app a try [here](https://fitness-tracker-63575.herokuapp.com/).
