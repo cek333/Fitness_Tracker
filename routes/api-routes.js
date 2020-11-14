@@ -16,13 +16,14 @@ router.get('/api/workouts', async function(req, res){
 });
 
 router.get('/api/workouts/range', async function(req, res){
-  let result = await db.Workout.find({ 'exercises.type': 'resistance' });
+  let result = await db.Workout.find({}).sort({day: -1}).limit(7).exec();
   console.log('[get /api/workouts/range]', result);
   res.json(result);
 });
 
 router.post('/api/workouts', async function(req, res) {
   console.log('[post /api/workouts]', req.body);
+  // Note: if req.body empty (typical case), no harm done
   let result = await db.Workout.create({ exercise: [ req.body ] });
   console.log(`[post /api/workouts] insertId=${result.insertId}`, result);
   res.json(result);
