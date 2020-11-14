@@ -79,6 +79,7 @@ function renderNoWorkoutText() {
 
   p.appendChild(strong);
   container.appendChild(p);
+  document.querySelector("#continue-btn").classList.add("d-none");
 }
 
 initWorkout();
